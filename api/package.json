@@ -2,13 +2,17 @@
   "name": "movies-api",
   "version": "1.0.0",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "start-dev": "node src/index.js",
+    "dev": "node --env-file .env --watch src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@fastify/cors": "^11.2.0",
     "fastify": "^5.7.4",
-    "sequelize": "^6.37.7"
+    "mariadb": "^3.5.1",
+    "sequelize": "^6.37.7",
+    "sequelize-auto": "^0.8.8"
   },
   "author": "",
   "license": "ISC",
