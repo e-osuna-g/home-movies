@@ -7,9 +7,16 @@ services:
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: movies
-
+      MARIADB_ROOT_HOST: "%" 
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "3306:3306" # Maps host port 3306 to container port 3306
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+
+volumes:
+  mariadb_data:
