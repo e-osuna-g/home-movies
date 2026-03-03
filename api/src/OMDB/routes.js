@@ -1,22 +1,8 @@
 import { OMDB_API_KEY, OMDB_URL } from "../envVars.js";
-import cors from "@fastify/cors";
+import { compareMovies } from "./compare.js";
+import { recentComparisons } from "./recentComparisons.js";
 
-const compareMovieBodyJsonSchema = {
-  type: "object",
-  required: ["imdbIds"],
-  properties: {
-    imdbIds: {
-      type: "array",
-      items: {
-        type: "string",
-      },
-      minItems: 2,
-      maxItems: 5,
-    },
-  },
-};
 /**
- * A plugin that provide encapsulated routes
  * @param {FastifyInstance} fastify encapsulated fastify instance
  * @param {Object} options plugin options, refer to https://fastify.dev/docs/latest/Reference/Plugins/#plugin-options
  */
@@ -29,7 +15,8 @@ export async function routes(fastify, options) {
 
   fastify.get("/api/movie/:imdbId", getMovie);
 
-  fastify.post("/api/compare", compareMovieBodyJsonSchema, compareMovies);
+  fastify.post("/api/compare", compareMovies);
+  fastify.get("/api/comparisons/recent", recentComparisons);
 }
 
 async function searchMovies(request, reply) {
@@ -67,6 +54,15 @@ async function getMovie(request, reply) {
   let queryResponse = new URLSearchParams();
   queryResponse.set("apikey", OMDB_API_KEY);
 
+  if (
+    !query.imdbId.startsWith("tt") ||
+    !(query.imdbId.length >= 9 && query.imdbId.length <= 10)
+  ) {
+    return reply.status(400).send({
+      Response: "False",
+      Error: "Invalid IMDb ID format. Must be 'tt' followed by 7-8 digits",
+    });
+  }
   if (query.imdbId) {
     queryResponse.set("i", query.imdbId);
   } else {
@@ -81,6 +77,4 @@ async function getMovie(request, reply) {
   );
   const responseJson = await searchResponse.json();
   return responseJson;
-}
-async function compareMovies() {
 }

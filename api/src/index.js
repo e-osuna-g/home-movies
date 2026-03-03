@@ -1,7 +1,6 @@
 import Fastify from "fastify";
 import { routes as omdbRoutes } from "./OMDB/routes.js";
 import cors from "@fastify/cors";
-import { dbConnection } from "./db/connection.js";
 
 const fastify = Fastify({
   logger: true,
