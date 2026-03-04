@@ -25,7 +25,9 @@ export async function recentComparisons(request, reply) {
       }],
     },
   );
-  console.log(findAll[0].movie_comparison_items);
+  if (findAll.length === 0) {
+    return reply.status(200).send([]);
+  }
   let ids = findAll.map((mc) => mc.movie_comparison_items).flat().map((items) =>
     items.dataValues.imdb_id
   );

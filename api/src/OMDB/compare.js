@@ -1,11 +1,8 @@
-import MovieComparison from "../db/models/movie_comparison.js";
-import MovieComparisonItems from "../db/models/movie_comparison_items.js";
-import { DataTypes, sequalize } from "../db/connection.js";
-import { OMDB_API_KEY, OMDB_URL } from "../envVars.js";
 import {
   movieComparison,
   movieComparisonItems,
 } from "../db/movieComparison.js";
+import { getMovies } from "./movies.js";
 
 const currencyFormat = {
   style: "currency",
@@ -24,19 +21,7 @@ export async function compareMovies(request, reply) {
     return reply.status(valid.status).send(valid.error);
   }
 
-  const requests = [];
-  for (let id of imdbIds) {
-    let queryParams = new URLSearchParams();
-    queryParams.set("apikey", OMDB_API_KEY);
-    queryParams.set("i", id);
-    requests.push(fetch(`${OMDB_URL}?${queryParams.toString()}`, {
-      headers: {
-        Accept: "application/json",
-      },
-    }));
-  }
-
-  const responses = await Promise.allSettled(requests);
+  const responses = await getMovies(imdbIds);
   const movies = [];
   const ratings = { distribution: [] };
   const boxOffice = { distribution: [] };
@@ -46,44 +31,37 @@ export async function compareMovies(request, reply) {
   const directors = new Set();
   const actors = [];
   const genres = [];
-  for (let response of responses) {
-    if (response.status == "rejected") {
-      // TODO update this to reflect issues
-      console.log(response.reason);
-    } else {
-      const movie = await response.value.json();
-      movies.push(movieSummary(movie));
-      console.log("###", movie);
-      if (typeof movie.Actors == "string") {
-        actors.push(new Set(movie.Actors.split(",").map((i) => i.trim())));
-      }
-      if (typeof movie.Genre == "string") {
-        genres.push(new Set(movie.Genre.split(",").map((i) => i.trim())));
-      }
-      if (typeof movie.Director == "string") {
-        for (let item of movie.Director.split(",")) directors.add(item);
-      }
-      ratings.distribution.push({
-        imdbId: movie.imdbID,
-        rating: movie.imdbRating,
-      });
-      boxOffice.distribution.push({
-        imdbId: movie.imdbID,
-        boxOffice: movie.BoxOffice,
-      });
-      releaseYears.timeline.push({
-        imdbId: movie.imdbID,
-        year: movie.Year,
-      });
-      runtime.distribution.push({
-        imdbId: movie.imdbID,
-        runtime: movie.Runtime,
-      });
-      metascore.distribution.push({
-        imdbId: movie.imdbID,
-        metascore: movie.Metascore,
-      });
+  for (let movie of responses) {
+    movies.push(movieSummary(movie));
+    if (typeof movie.Actors == "string") {
+      actors.push(new Set(movie.Actors.split(",").map((i) => i.trim())));
     }
+    if (typeof movie.Genre == "string") {
+      genres.push(new Set(movie.Genre.split(",").map((i) => i.trim())));
+    }
+    if (typeof movie.Director == "string") {
+      for (let item of movie.Director.split(",")) directors.add(item);
+    }
+    ratings.distribution.push({
+      imdbId: movie.imdbID,
+      rating: movie.imdbRating,
+    });
+    boxOffice.distribution.push({
+      imdbId: movie.imdbID,
+      boxOffice: movie.BoxOffice,
+    });
+    releaseYears.timeline.push({
+      imdbId: movie.imdbID,
+      year: movie.Year,
+    });
+    runtime.distribution.push({
+      imdbId: movie.imdbID,
+      runtime: movie.Runtime,
+    });
+    metascore.distribution.push({
+      imdbId: movie.imdbID,
+      metascore: movie.Metascore,
+    });
   }
   const commonActors = new Set();
 
@@ -321,41 +299,45 @@ export async function compareMovies(request, reply) {
     },
     movieCount: imdbIds.length,
   };
-  if (request.body.id) {
+  if (request.body.comparedAt) {
     //edited
-    const movieComparisonResult = await movieComparison.findByPk(
-      request.body.id,
-    );
+    const movieComparisonResult = await movieComparison.findOne({
+      where: {
+        created_at: request.body.comparedAt,
+      },
+    });
+
     const items = await movieComparisonItems.findAll({
-      attributes: ["id", "movieComparisonId", "imdbId", "index"],
+      attributes: ["id", "movie_comparison_id", "imdb_id", "index"],
       where: { movie_comparison_id: movieComparisonResult.id },
     });
-    const lastIndex = items[items.length - 1].dataValues.index;
+    const count = items.length;
     const newItems = new Set(movies.map((i) => i.imdbID));
-    const oldItems = new Set(items.map((i) => i.dataValues.imdbId));
+    const oldItems = new Set(items.map((i) => i.dataValues.imdb_id));
     const toAdd = newItems.difference(oldItems);
     const toDelete = oldItems.difference(newItems);
-    let counter = 0;
 
-    movieComparisonItems.bulkCreate(
-      Array.from(toAdd).map((id) => ({
-        movie_comparison_id: movieComparisonResult.id,
-        imdb_id: id,
-        index: lastIndex + (++counter), //first add to counter then sum
-      })),
+    await movieComparisonItems.bulkCreate(
+      Array.from(toAdd).map((id, index) => {
+        return {
+          movie_comparison_id: movieComparisonResult.dataValues.id,
+          imdb_id: id,
+          index: count + index,
+        };
+      }),
     );
+
     for (let id of toDelete) {
-      movieComparisonItems.destroy({
+      await movieComparisonItems.destroy({
         where: {
-          movie_comparison_id: movieComparisonResult.id,
+          movie_comparison_id: movieComparisonResult.dataValues.id,
           imdb_id: id,
         },
       });
     }
-    console.log("editing");
     return reply.status(200).send({
       ...coreBody,
-      comparedAt: movieComparisonResult.created_at,
+      comparedAt: movieComparisonResult.dataValues.createdAt.toISOString(),
       id: movieComparisonResult.id,
     });
   } else {
@@ -371,7 +353,7 @@ export async function compareMovies(request, reply) {
     })));
     return reply.status(200).send({
       ...coreBody,
-      comparedAt: movieComparisonResult.created_at,
+      comparedAt: movieComparisonResult.dataValues.createdAt.toISOString(),
       id: movieComparisonResult.id,
     });
   }

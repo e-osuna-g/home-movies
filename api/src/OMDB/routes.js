@@ -1,5 +1,6 @@
 import { OMDB_API_KEY, OMDB_URL } from "../envVars.js";
 import { compareMovies } from "./compare.js";
+import { getMovies } from "./movies.js";
 import { recentComparisons } from "./recentComparisons.js";
 
 /**
@@ -71,10 +72,6 @@ async function getMovie(request, reply) {
       Error: "Search parameter 'i' is required",
     });
   }
-
-  const searchResponse = await fetch(
-    `${OMDB_URL}?${queryResponse.toString()}`,
-  );
-  const responseJson = await searchResponse.json();
-  return responseJson;
+  const movie = await getMovies([query.imdbId]);
+  return movie[0];
 }

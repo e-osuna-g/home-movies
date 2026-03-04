@@ -6,11 +6,5 @@ export const sequalize = new Sequelize(DB.NAME, DB.USERNAME, DB.PASSWORD, {
   host: DB.HOST,
   port: DB.PORT,
   dialect: DB.DIALECT,
+  timezone: "+00:00", // Default is +00:00 (UTC)
 });
-/*try {
-  await dbConnection.authenticate();
-  console.log("Connection has been established successfully.");
-} catch (error) {
-  console.error("Unable to connect to the database:", error);
-}
-*/

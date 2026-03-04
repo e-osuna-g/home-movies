@@ -10,10 +10,16 @@ export default class movie_comparison extends Model {
         allowNull: false,
         primaryKey: true,
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        defaultValue: sequelize.fn("NOW"),
+        field: "created_at",
+      },
     }, {
       sequelize,
       tableName: "movie_comparison",
       timestamps: true,
+      underscored: true,
       paranoid: false,
       indexes: [
         {

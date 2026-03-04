@@ -21,6 +21,7 @@ export default class movie_comparison_items extends Model {
       },
       imdb_id: {
         type: DataTypes.STRING(10),
+        field: "imdb_id",
         allowNull: false,
       },
       index: {
@@ -31,6 +32,7 @@ export default class movie_comparison_items extends Model {
       sequelize,
       tableName: "movie_comparison_items",
       timestamps: false,
+      underscored: true,
       paranoid: false,
       indexes: [
         {

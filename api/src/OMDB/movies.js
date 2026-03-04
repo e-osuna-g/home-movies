@@ -20,7 +20,6 @@ export async function getMovies(ids) {
   for (let [error, promiseItem] of values) {
     let response = await promiseItem;
     if (!error) {
-      console.log("###movie fetched", response.imdbID);
       itemsAdded.push({
         imdb_id: response.imdbID,
         info: JSON.stringify(response),
