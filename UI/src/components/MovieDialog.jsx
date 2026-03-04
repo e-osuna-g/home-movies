@@ -15,7 +15,9 @@ export default function MovieDialog({ open, movieId, handleClose }) {
       <div style={{ display: "flex" }}>
         <div>
           <img src={movie?.Poster} />
-          <Button href="/compare" variant="contained">Compare</Button>
+          <Button href={`/compare?movies=${movieId}`} variant="contained">
+            Compare
+          </Button>
         </div>
         <div>
           <div id="alert-dialog-slide-description">

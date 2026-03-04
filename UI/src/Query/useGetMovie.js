@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 const DAY = 1000 * 60 * 60 * 24;
 
 export function useGetMovie(id) {
-  console.log("gettign id", id);
   const { isPending, error, data } = useQuery({
     queryKey: ["/api/movie/:imdbId", id],
     queryFn: fetchSearchMovie,

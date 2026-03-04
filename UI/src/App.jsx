@@ -6,9 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient();
 function selectComponent(path) {
   let component = <Home />;
-  switch (path) {
-    case "/compare":
-      return <Compare />;
+  if (path === "/compare" || path === "/compare/") {
+    return <Compare />;
   }
   return component;
 }

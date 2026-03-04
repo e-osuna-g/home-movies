@@ -10,7 +10,9 @@ import { useState } from "react";
 import { useSearchMovies } from "../Query/useSearchMovies";
 import { useGetMovie } from "../Query/useGetMovie";
 
-export default function MovieDialogSearch({ open, handleClose }) {
+export default function MovieDialogSearch(
+  { open, addMovieHandler, handleClose },
+) {
   const [selectedMovie, setMovie] = useState(null);
   const [searchValue, setSearchValue] = useState("");
 
@@ -18,7 +20,9 @@ export default function MovieDialogSearch({ open, handleClose }) {
   const { data: movie, _isPending } = useGetMovie(
     selectedMovie?.imdbID,
   );
-
+  const setAndClose = () => {
+    addMovieHandler(movie.imdbID);
+  };
   return (
     <Dialog
       open={open}
@@ -57,7 +61,12 @@ export default function MovieDialogSearch({ open, handleClose }) {
           <div>
             {movie ? <img src={movie.Poster} /> : null}
 
-            <Button variant="contained">Compare</Button>
+            <Button
+              variant="contained"
+              onClick={() => setAndClose(movie.imdbID)}
+            >
+              Compare
+            </Button>
           </div>
           <div>
             <div id="alert-dialog-slide-description">
