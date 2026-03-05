@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import useDebounce from "../hooks/useDebounce";
+import { API_SERVER } from "../env.js";
 const DAY = 1000 * 60 * 60 * 24;
-export function useSearchMovies(search, opts = { debounceTime: 300 }) {
+export function useSearchMovies(search, opts = { debounceTime: 500 }) {
   const debouncedSearch = useDebounce(search, opts.debounceTime);
   const { isPending, error, data } = useQuery({
+    retry: false,
     queryKey: ["/api/search/", debouncedSearch],
     queryFn: fetchSearchMovie,
     gcTime: Infinity,
@@ -16,18 +18,18 @@ async function fetchSearchMovie(search) {
   const params = new URLSearchParams();
   const s = search.queryKey[1];
 
-  params.set("s", s);
+  params.set("s", s.trim());
   if (s.length == 0) {
     return { Search: [], totalResults: "0", Response: "True" };
   }
   const val = await fetch(
-    `http://localhost:3000/api/search?${params.toString()}`,
+    `${API_SERVER}/api/search?${params.toString()}`,
     {
       mode: "cors",
     },
   );
   if (!val.ok) {
-    throw new Error("Search error");
+    throw await val.json();
   }
   return await val.json();
 }

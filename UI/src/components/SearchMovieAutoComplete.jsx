@@ -17,7 +17,9 @@ export default function SearchMovieAutoComplete({
       }}
       value={value} // TODO: update this part value=null is super strange even tho value is not needed more modal
       inputValue={inputValue}
+      disableCloseOnSelect={true}
       onChange={(event, newValue) => {
+        console.log("Changing", event, newValue);
         onChange(event, newValue);
         //onInputChange(event, newValue);
       }}

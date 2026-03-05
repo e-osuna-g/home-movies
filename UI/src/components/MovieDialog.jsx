@@ -1,46 +1,19 @@
 import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useGetMovie } from "../Query/useGetMovie";
+import "./movieDialog.css";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import MovieDialogContent from "./MovieDialogContent.jsx";
 
 export default function MovieDialog({ open, movieId, handleClose }) {
   const { data: movie, isPending, _error } = useGetMovie(movieId);
   let content = <div>InProgress</div>;
   if (!isPending && movie) {
-    content = (
-      <div style={{ display: "flex" }}>
-        <div>
-          <img src={movie?.Poster} />
-          <Button href={`/compare?movies=${movieId}`} variant="contained">
-            Compare
-          </Button>
-        </div>
-        <div>
-          <div id="alert-dialog-slide-description">
-            <div>Title: {movie?.Title}</div>
-            <div>
-              <div>Year: {movie?.Year}</div>
-              <div>
-                Genre: {movie?.Genre?.split(",").map((i, index) => (
-                  <Chip
-                    key={index}
-                    label={i}
-                    color="info"
-                    variant="outlined"
-                  />
-                ))}
-              </div>
-              <div>Rating: {movie?.Rated}</div>
-            </div>
-            <div>Plot: {movie?.Plot}</div>
-          </div>
-        </div>
-      </div>
-    );
+    content = <MovieDialogContent movie={movie} />;
   }
   return (
     <Dialog
@@ -48,14 +21,33 @@ export default function MovieDialog({ open, movieId, handleClose }) {
       keepMounted
       onClose={handleClose}
       aria-describedby="alert-dialog-slide-description"
+      fullWidth={true}
+      maxWidth="lg"
     >
       <DialogTitle>{movie?.Title}</DialogTitle>
-      <DialogContent>
+      <IconButton
+        aria-label="close"
+        onClick={handleClose}
+        sx={(theme) => ({
+          position: "absolute",
+          right: 8,
+          top: 8,
+          color: theme.palette.grey[500],
+        })}
+      >
+        <CloseIcon />
+      </IconButton>
+      <DialogContent dividers className="movie-dialog-content">
         {content}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Disagree</Button>
-        <Button onClick={handleClose}>Agree</Button>
+        <Button
+          disabled={isPending}
+          href={`/compare?movies=${movieId}`}
+          variant="contained"
+        >
+          Compare
+        </Button>
       </DialogActions>
     </Dialog>
   );

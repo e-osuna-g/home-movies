@@ -1,0 +1,40 @@
+.movie-dialog-content {
+  & .wrapper {
+    display: flex;
+    gap: 10px;
+  }
+
+  & .movie-dialog-chips {
+    display: flex;
+    gap: 3px;
+  }
+
+  & .movie-dialog-rated {
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+    gap: 5px;
+    --rated-color: #006835;
+
+    &.PG {
+      --rated-color: #f05a25;
+    }
+
+    &.PG-13 {
+      --rated-color: #7f3c98;
+    }
+
+    &.R {
+      --rated-color: #d8121a;
+    }
+
+    &.NC-17 {
+      --rated-color: #1c3f9b;
+
+    }
+
+    & svg {
+      color: var(--rated-color);
+    }
+  }
+}

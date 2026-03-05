@@ -9,6 +9,9 @@ import SearchMovieAutoComplete from "./SearchMovieAutoComplete";
 import { useState } from "react";
 import { useSearchMovies } from "../Query/useSearchMovies";
 import { useGetMovie } from "../Query/useGetMovie";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import MovieDialogContent from "./MovieDialogContent.jsx";
 
 export default function MovieDialogSearch(
   { open, addMovieHandler, handleClose },
@@ -16,12 +19,17 @@ export default function MovieDialogSearch(
   const [selectedMovie, setMovie] = useState(null);
   const [searchValue, setSearchValue] = useState("");
 
-  const { data, isPending } = useSearchMovies(searchValue);
+  const { data, isPending, error } = useSearchMovies(searchValue);
   const { data: movie, _isPending } = useGetMovie(
     selectedMovie?.imdbID,
   );
-  const setAndClose = () => {
-    addMovieHandler(movie.imdbID);
+  const setAndClose = (id) => {
+    if (id) {
+      addMovieHandler(id);
+      setMovie(null);
+      setSearchValue("");
+      handleClose();
+    }
   };
   return (
     <Dialog
@@ -29,8 +37,22 @@ export default function MovieDialogSearch(
       keepMounted
       onClose={handleClose}
       aria-describedby="alert-dialog-slide-description"
+      fullWidth={true}
+      maxWidth="lg"
     >
       <DialogTitle>Add Movie to compare</DialogTitle>
+      <IconButton
+        aria-label="close"
+        onClick={handleClose}
+        sx={(theme) => ({
+          position: "absolute",
+          right: 8,
+          top: 8,
+          color: theme.palette.grey[500],
+        })}
+      >
+        <CloseIcon />
+      </IconButton>
       <DialogContent>
         <div style={{ paddingTop: "5px" }}>
           <SearchMovieAutoComplete
@@ -44,6 +66,7 @@ export default function MovieDialogSearch(
             inputValue={searchValue}
             value={null}
             onInputChange={(_event, newInputValue) => {
+              console.log("loggin", newInputValue, _event);
               setSearchValue(newInputValue);
             }}
             onChange={(event, newValue) => {
@@ -57,42 +80,15 @@ export default function MovieDialogSearch(
             }}
           />
         </div>
-        <div style={{ display: "flex" }}>
-          <div>
-            {movie ? <img src={movie.Poster} /> : null}
-
-            <Button
-              variant="contained"
-              onClick={() => setAndClose(movie.imdbID)}
-            >
-              Compare
-            </Button>
-          </div>
-          <div>
-            <div id="alert-dialog-slide-description">
-              <div>Title: {movie?.Title}</div>
-              <div>
-                <div>Year: {movie?.Year}</div>
-                <div>
-                  Genre: {movie?.Genre?.split(",").map((i, index) => (
-                    <Chip
-                      key={index}
-                      label={i}
-                      color="info"
-                      variant="outlined"
-                    />
-                  ))}
-                </div>
-                <div>Rating: {movie?.Rated}</div>
-              </div>
-              <div>Plot: {movie?.Plot}</div>
-            </div>
-          </div>
-        </div>
+        <MovieDialogContent movie={movie} searchError={error} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Disagree</Button>
-        <Button onClick={handleClose}>Agree</Button>
+        <Button
+          variant="contained"
+          onClick={() => setAndClose(movie.imdbID)}
+        >
+          Add to compare
+        </Button>
       </DialogActions>
     </Dialog>
   );

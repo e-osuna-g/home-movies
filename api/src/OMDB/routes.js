@@ -10,7 +10,6 @@ import { recentComparisons } from "./recentComparisons.js";
 export async function routes(fastify, options) {
   fastify.get(
     "/api/search",
-    { config: { cors: { origin: "*" } } },
     searchMovies,
   );
 
@@ -47,6 +46,9 @@ async function searchMovies(request, reply) {
     `${OMDB_URL}?${queryResponse.toString()}`,
   );
   const responseJson = await searchResponse.json();
+  if (responseJson.Response == "False") {
+    reply.status(400).send(responseJson);
+  }
   return responseJson;
 }
 

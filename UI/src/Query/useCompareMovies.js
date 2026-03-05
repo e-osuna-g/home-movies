@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { API_SERVER } from "./../env.js";
 import { useState } from "react";
 const DAY = 1000 * 60 * 60 * 24;
 let fmtOpts = {
@@ -10,19 +11,11 @@ let fmtOpts = {
 
 export default function useCompareMovies(movies, lastComparedAtProp = "") {
   const [lastComparedAt, setLastComparedAt] = useState(lastComparedAtProp);
-  const [_, setComparedData] = useState(null);
   const mutation = useMutation({
     mutationKey: ["/api/compare", movies, lastComparedAt],
     retry: false,
     mutationFn: fetchCompareMovies,
-    onSuccess: (data, variables, onMutateResult, context) => {
-      console.log(
-        data,
-        variables,
-        onMutateResult,
-        context,
-      );
-      setComparedData(data);
+    onSuccess: (data) => {
       setLastComparedAt(data.comparedAt);
     },
   });
@@ -30,12 +23,11 @@ export default function useCompareMovies(movies, lastComparedAtProp = "") {
 }
 async function fetchCompareMovies(search, mutation) {
   const ids = search;
-  console.log("received on fetch", search, arguments, mutation);
 
   const comparedAt = mutation.mutationKey[2];
 
   const val = await fetch(
-    `http://localhost:3000/api/compare`,
+    `${API_SERVER}/api/compare`,
     {
       method: "POST",
       mode: "cors",
@@ -45,7 +37,7 @@ async function fetchCompareMovies(search, mutation) {
       body: JSON.stringify({
         imdbIds: ids,
 
-        comparedAt: comparedAt
+        comparedAt: comparedAt // we should be comparing IDs
           ? new Intl.DateTimeFormat("en-CA", fmtOpts).format(
             new Date(comparedAt),
           ).split(",").join("") + ".000"
@@ -54,7 +46,8 @@ async function fetchCompareMovies(search, mutation) {
     },
   );
   if (!val.ok) {
-    throw new Error("Search error");
+    console.log("throwing compare error", val);
+    throw await val.json();
   }
   return await val.json();
 }

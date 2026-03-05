@@ -49,6 +49,13 @@ caching mechanisms, and built-in support for loading and error states.
 While `zustand` was initially considered for global state managment, further
 analysis revealed that a state managment library was unnecesary.
 
+### Front-end Changed requirements
+
+In section 1.1.3 Requirements for Modal to view the result of the search The
+`button` to start comparing the current movie selected in the modal, was moved,
+from the left column, to the footer of the modal, where it is always available,
+clear, and already a well known UX design.
+
 ## Backend Selection
 
 The backend selection framework was driven by the project constraints and

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { API_SERVER } from "../env.js";
 
 const DAY = 1000 * 60 * 60 * 24;
 
@@ -18,7 +19,7 @@ async function fetchSearchMovie(search) {
     return { "Response": "False", "Error": "Incorrect IMDb ID." };
   }
   const val = await fetch(
-    `http://localhost:3000/api/movie/${id}`,
+    `${API_SERVER}/api/movie/${id}`,
     {
       mode: "cors",
     },

@@ -6,12 +6,10 @@ export default function CompareSection() {
   return (
     <Paper
       variant="elevation"
-      elevation={24}
+      elevation={1}
       sx={{
-        marginTop: "2rem",
         padding: "1rem",
         display: "flex",
-
         justifyContent: "space-between",
       }}
     >

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { API_SERVER } from "../env.js";
 
 const DAY = 1000 * 60 * 60 * 24;
 
@@ -15,7 +16,7 @@ export function useRecentComparisons() {
 
 async function fetchRecentComparisons() {
   const val = await fetch(
-    `http://localhost:3000/api/comparisons/recent`,
+    `${API_SERVER}/api/comparisons/recent`,
     {
       mode: "cors",
     },
