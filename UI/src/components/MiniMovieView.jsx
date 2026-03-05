@@ -10,10 +10,14 @@ const MiniMovieViewStyled = styled("div", {
 })({
   position: "relative",
   boxSizing: "border-box",
-  height: "200px",
   width: "200px",
-  padding: "10px",
-  marginTop: "5px",
+  backgroundColor: "",
+  "& .mini-movie-card": {
+    padding: "10px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
   "& img.mini-movie-poster": {
     maxHeight: "150px",
   },
@@ -31,7 +35,11 @@ export default function MiniMovieView({ movieId, removeMovie }) {
   } else if (movie) {
     return (
       <MiniMovieViewStyled>
-        <Card elevation={6} sx={{ position: "relative", paddingTop: "5px" }}>
+        <Card
+          className="mini-movie-card"
+          elevation={6}
+          sx={{ position: "relative", padding: "5px" }}
+        >
           <img
             className="mini-movie-poster"
             src={movie.Poster}
@@ -42,6 +50,7 @@ export default function MiniMovieView({ movieId, removeMovie }) {
           <span
             className="mini-movie-close-button"
             onClick={removeMovie}
+            role="button"
           >
             <CloseIcon />
           </span>

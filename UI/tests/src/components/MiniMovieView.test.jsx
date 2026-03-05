@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { render } from "vitest-browser-react";
 import MiniMovieView from "../../../src/components/MiniMovieView.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -6,7 +6,6 @@ import { afterAll, afterEach, beforeAll } from "vitest";
 import { setupWorker } from "msw/browser";
 import { http, HttpResponse } from "msw";
 import { API_SERVER } from "../../../src/env.js";
-import App from "../../../src/App.jsx";
 
 const queryClient = new QueryClient();
 const response = {
@@ -42,8 +41,7 @@ const response = {
   "Response": "True",
 };
 const handlers = [
-  http.get(`${API_SERVER}/api/movie/:id`, (request) => {
-    console.log("ey is this on?", request);
+  http.get(`${API_SERVER}/api/movie/:id`, () => {
     return HttpResponse.json(response);
   }),
 ];
@@ -61,17 +59,20 @@ describe("MiniMovie", () => {
   // Reset handlers after each test for test isolation
   afterEach(() => worker.resetHandlers());
   test("renders renders correctly", async () => {
-    // render the component; vitest-browser-react doesn't return testing-library
-    // queries, so we use the `page` API instead.
-
-    const { getByText } = await render(
+    const mockRemoveMovie = vi.fn();
+    const { getByText, getByRole } = await render(
       <QueryClientProvider client={queryClient}>
-        <MiniMovieView movieId={"tt0126029"} />
+        <MiniMovieView
+          movieId={"tt0126029"}
+          removeMovie={() => mockRemoveMovie("tt0126029")}
+        />
       </QueryClientProvider>,
     );
     await expect.element(getByText("Shrek")).toBeInTheDocument();
-    // wait for the text to appear in the DOM via a Playwright locator
 
-    // assert it contains the expected title
+    expect(getByRole("img").element().src).toBe(response.Poster);
+    expect(getByRole("button")).toBeInTheDocument();
+    await getByRole("button").click();
+    expect(mockRemoveMovie).toHaveBeenCalledOnce();
   });
 });
