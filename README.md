@@ -41,6 +41,12 @@ cd api
 npm run dev
 ```
 
+To test the UI please do in the UI directory
+
+```bash
+npx playwright install
+```
+
 ## Front-end selection
 
 On the front-end I selected `TanStack Query` for data-fetching for it's robust
