@@ -1,7 +1,6 @@
 import Link from "@mui/material/Link";
 
 export default function CompareItem(prop) {
-  console.log("###props", prop);
   const query = new URLSearchParams();
   for (let i of prop.imdbIds) {
     query.append("movies", i);

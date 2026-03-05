@@ -10,7 +10,6 @@ const chartSetting = {
   height: 400,
 };
 export default function Graph(props) {
-  console.log("props", props);
   if (props && props.data == null) {
     return <div>No data for chart</div>;
   }
