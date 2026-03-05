@@ -35,6 +35,7 @@ export default function Compare() {
         setComparedData(response);
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleOpen = () => {
     if (movies.length < 5) {
