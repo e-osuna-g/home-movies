@@ -16,8 +16,6 @@ export default function MovieDialogContent(
   if (!movie) {
     return <div>Loading...</div>;
   }
-  console.log("whatismovie", searchError);
-
   if (
     searchError && searchError.Response == "False" &&
     searchError.Error == "Too many results."

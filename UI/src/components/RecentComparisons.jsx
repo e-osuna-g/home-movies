@@ -3,7 +3,6 @@ import CompareItem from "./CompareItem.jsx";
 
 export default function RecentComparisons() {
   const { isPending, data, isSuccess } = useRecentComparisons();
-  console.log("What is data", data);
   return (
     <div className="compare-carousel">
       {isPending

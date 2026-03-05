@@ -12,16 +12,14 @@ export default function SearchMovieAutoComplete({
     <Autocomplete
       freeSolo
       onInputChange={(event, newInputValue) => {
+        if (event.code == "Enter") return;
         onInputChange(event, newInputValue);
-        //onValueChange(event, newInputValue);
       }}
-      value={value} // TODO: update this part value=null is super strange even tho value is not needed more modal
+      value={value}
       inputValue={inputValue}
       disableCloseOnSelect={true}
       onChange={(event, newValue) => {
-        console.log("Changing", event, newValue);
         onChange(event, newValue);
-        //onInputChange(event, newValue);
       }}
       options={options}
       renderInput={(params) => {

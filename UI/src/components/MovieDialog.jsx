@@ -8,10 +8,11 @@ import "./movieDialog.css";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import MovieDialogContent from "./MovieDialogContent.jsx";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function MovieDialog({ open, movieId, handleClose }) {
   const { data: movie, isPending, _error } = useGetMovie(movieId);
-  let content = <div>InProgress</div>;
+  let content = <CircularProgress />;
   if (!isPending && movie) {
     content = <MovieDialogContent movie={movie} />;
   }

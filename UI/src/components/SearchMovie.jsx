@@ -25,8 +25,6 @@ export function SearchMovie() {
         inputValue={searchValue}
         value={null}
         onInputChange={(_event, newInputValue) => {
-          console.log("newinput", newInputValue);
-          if (_event.code == "Enter") return;
           setSearchValue(newInputValue);
         }}
         onChange={(event, newValue) => {
