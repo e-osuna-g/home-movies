@@ -3,9 +3,9 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { ThemeProvider } from "@emotion/react";
-import { createTheme } from "@mui/material/styles";
-import { blue } from "@mui/material/colors";
-import MiniMovieView from "./components/MiniMovieView.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { theme } from "./theme.js";
+
 async function enableMocking() {
   if (import.meta.env.NODE_ENV !== "development") {
     return;
@@ -17,15 +17,6 @@ async function enableMocking() {
   // once the Service Worker is up and ready to intercept requests.
   return await worker.start();
 }
-const theme = createTheme({
-  palette: {
-    primary: blue,
-    secondary: {
-      main: "#ffc107",
-    },
-  },
-});
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 enableMocking().then(() => {
