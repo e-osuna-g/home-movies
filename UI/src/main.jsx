@@ -21,12 +21,12 @@ async function enableMocking() {
 const queryClient = new QueryClient();
 enableMocking().then(() => {
   createRoot(document.getElementById("root")).render(
-    <>
+    <StrictMode>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <App />
         </ThemeProvider>
       </QueryClientProvider>
-    </>,
+    </StrictMode>,
   );
 });
