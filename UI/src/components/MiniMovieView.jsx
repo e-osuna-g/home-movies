@@ -12,11 +12,19 @@ const MiniMovieViewStyled = styled("div", {
   boxSizing: "border-box",
   width: "200px",
   backgroundColor: "",
+  flex: 1,
+  display: "flex",
+
   "& .mini-movie-card": {
     padding: "10px",
     display: "flex",
+
     flexDirection: "column",
     alignItems: "center",
+    "& p": {
+      flex: 1,
+      alignContent: "space-evenly",
+    },
   },
   "& img.mini-movie-poster": {
     maxHeight: "150px",

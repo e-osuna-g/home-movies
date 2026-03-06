@@ -1,15 +1,22 @@
+import CircularProgress from "@mui/material/CircularProgress";
 import { useRecentComparisons } from "../Query/useRecentComparisons.js";
 import CompareItem from "./CompareItem.jsx";
+import Grid from "@mui/material/Grid";
 
+const ParentRecentItems = (theme) => ({
+  [theme.breakpoints.down("md")]: {
+    justifyContent: "center",
+  },
+});
 export default function RecentComparisons() {
   const { isPending, data, isSuccess } = useRecentComparisons();
   return (
-    <div className="compare-carousel">
-      {isPending
-        ? <div>Loading...</div>
-        : isSuccess
-        ? data.map((i) => <CompareItem {...i} />)
+    <Grid sx={ParentRecentItems} container spacing={10}>
+      {isPending ? <CircularProgress /> : isSuccess
+        ? (
+          data.map((i) => <CompareItem {...i} />)
+        )
         : <div>Error on fetching</div>}
-    </div>
+    </Grid>
   );
 }

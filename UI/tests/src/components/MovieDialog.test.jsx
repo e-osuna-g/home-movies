@@ -35,7 +35,7 @@ describe("MovieDialog", () => {
     const { getByRole, getByText } = await render(
       <QueryClientProvider client={queryClient}>
         <MovieDialog
-          movieId={MovieMock.shrek}
+          movieId={MovieMock.shrek.imdbID}
           open={true}
           handleClose={mockClose}
         />
@@ -53,7 +53,7 @@ describe("MovieDialog", () => {
     const { getByRole, getByText } = await render(
       <QueryClientProvider client={queryClient}>
         <MovieDialog
-          movieId={MovieMock.shrek}
+          movieId={MovieMock.shrek.imdbID}
           open={true}
           handleClose={mockClose}
         />
@@ -67,7 +67,6 @@ describe("MovieDialog", () => {
 
   test("Links correctly", async () => {
     const mockClose = vi.fn();
-
     const { getByRole, getByText } = await render(
       <QueryClientProvider client={queryClient}>
         <MovieDialog
@@ -79,11 +78,8 @@ describe("MovieDialog", () => {
     );
 
     await expect.element(getByText(MovieMock.shrek.Title)).toBeInTheDocument();
-    console.log(getByRole("link").element());
     const link = await getByRole("link").element().href;
-    console.log(link);
     let search = new URL(link).searchParams;
-    console.log("searchParams", search.toString());
     expect(search.get("movies")).toBe(MovieMock.shrek.imdbID);
   });
 });

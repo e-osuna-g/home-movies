@@ -43,17 +43,3 @@
 .read-the-docs {
   color: #888;
 }
-
-
-.compare-carousel-item {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  ;
-}
-
-.compare-carousel {
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-}

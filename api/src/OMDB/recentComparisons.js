@@ -46,6 +46,7 @@ export async function recentComparisons(request, reply) {
       Titles: titles,
       movieCount: ids.length,
       comparedAt: movieComp.dataValues.created_at,
+      id: movieComp.dataValues.id,
     };
   }));
 }

@@ -1,3 +1,4 @@
+import Alert from "@mui/material/Alert";
 import { BarChart } from "@mui/x-charts/BarChart";
 
 const chartSetting = {
@@ -10,8 +11,8 @@ const chartSetting = {
   height: 400,
 };
 export default function Graph(props) {
-  if (props && props.data == null) {
-    return <div>No data for chart</div>;
+  if (props && Array.isArray(props.data) && props.data.length == 0) {
+    return <Alert severity="info">No data for chart</Alert>;
   }
   if (props && props.data) {
     const ratingsDataset = [];
@@ -56,6 +57,11 @@ export default function Graph(props) {
       </>
     );
   } else {
-    return <div>Loading...</div>;
+    return (
+      <Alert severity="info">
+        Not enough data to provide the chart, at least 2 selected movies are
+        required
+      </Alert>
+    );
   }
 }

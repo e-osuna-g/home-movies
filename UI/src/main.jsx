@@ -25,12 +25,17 @@ const theme = createTheme({
     },
   },
 });
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 enableMocking().then(() => {
   createRoot(document.getElementById("root")).render(
-    <StrictMode>
-      <ThemeProvider theme={theme}>
-        <MiniMovieView />
-      </ThemeProvider>
-    </StrictMode>,
+    <>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </>,
   );
 });

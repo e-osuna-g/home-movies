@@ -2,6 +2,8 @@ import Chip from "@mui/material/Chip";
 import MovieIcon from "@mui/icons-material/Movie";
 import Divider from "@mui/material/Divider";
 import { styled } from "@mui/material/styles";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
 
 const MovieDialogContentStyled = styled("div", {
   name: "MovieDialogContentStyled",
@@ -14,20 +16,24 @@ export default function MovieDialogContent(
   { movie, searchError },
 ) {
   if (!movie) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
   if (
     searchError && searchError.Response == "False" &&
     searchError.Error == "Too many results."
   ) {
     return (
-      <div>
+      <Alert severity="info">
         Too many results, please improve your search, with a more unique search
-      </div>
+      </Alert>
     );
   }
   if (movie && movie.Response == "False") {
-    return <div>Please, use a longer work for your search</div>;
+    return (
+      <Alert severity="info">
+        Please, use a longer work for your search
+      </Alert>
+    );
   }
   return (
     <MovieDialogContentStyled>

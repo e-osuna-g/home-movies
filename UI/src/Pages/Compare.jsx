@@ -1,25 +1,46 @@
 import Button from "@mui/material/Button";
 import MiniMovieView from "../components/MiniMovieView";
 import MovieDialogSearch from "../components/MovieDialogSearch";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import useCompareMovies from "../Query/useCompareMovies.js";
 import { useEffect } from "react";
 import Graph from "../components/Graph.jsx";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Paper from "@mui/material/Paper";
-
+import { useMutationState } from "@tanstack/react-query";
+import HomeIcon from "@mui/icons-material/Home";
+import Link from "@mui/material/Link";
+import { styled } from "@mui/material/styles";
+const CompareNavStyled = styled("nav")({
+  display: "flex",
+  paddingLeft: "5px",
+});
 export default function Compare() {
   const queryValues = new URLSearchParams(window.location.search);
   const queryMovies = queryValues.getAll("movies");
   const comparedAt = queryValues.get("compared_at");
-
+  const hasRun = useRef(false);
+  const id = queryValues.get("id");
   const [isOpen, setIsOpen] = useState(false);
   const [isSnackOpen, setIsSnackOpen] = useState(false);
   const [ErrorMessage, setErrorMessage] = useState("");
-  const [comparedData, setComparedData] = useState(null);
   const [movies, setMovies] = useState(queryMovies);
-  const mutation = useCompareMovies(movies, comparedAt);
+  const { mutate } = useCompareMovies(movies, comparedAt, id);
+  const comparations = useMutationState({
+    filters: { status: "success" },
+    select: (mutation) => {
+      // get the latest
+      if (
+        mutation.options.mutationKey[0] === "/api/compare"
+      ) {
+        return mutation.state.data;
+      }
+      return null;
+    },
+  });
+  const lastCompared = comparations[comparations.length - 1];
+
   const onCompareError = (error) => {
     if (error && error.error.indexOf("Duplicate") >= 0) {
       setIsSnackOpen(true);
@@ -30,13 +51,12 @@ export default function Compare() {
   };
   useEffect(() => {
     //initial mutation to refresh everything
-    mutation.mutate([...movies], {
-      onSuccess: (response) => {
-        setComparedData(response);
-      },
-    });
+    if (!hasRun.current) {
+      hasRun.current = true;
+      mutate([...movies]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mutate]);
   const handleOpen = () => {
     if (movies.length < 5) {
       setIsOpen(true);
@@ -53,27 +73,31 @@ export default function Compare() {
     setIsOpen(false);
   };
   const addMovie = (movieId) => {
-    mutation.mutate([...movies, movieId], {
-      onSuccess: (response) => {
-        setComparedData(response);
-      },
-      onError: onCompareError,
-      onSettled: () => {
-        setMovies((state) => [...state, movieId]);
-      },
-    });
+    if (movies.length < 5) {
+      mutate([...movies, movieId], {
+        onError: onCompareError,
+        onSettled: (response) => {
+          setMovies((state) => {
+            const newState = [...state, movieId];
+            const params = new URLSearchParams();
+            for (let i of newState) params.append("movies", i);
+            params.append("id", response.id);
+            history.replaceState(null, "", "/compare?" + params.toString());
+            return newState;
+          });
+        },
+      });
+    }
   };
   const removeMovie = (movieId) => {
     const newState = movies.filter((id) => id !== movieId);
-    mutation.mutate(newState, {
+    mutate(newState, {
       onSuccess: (response) => {
-        setComparedData(response);
         setMovies(() => {
-          return newState;
-        });
-      },
-      onSettled: () => {
-        setMovies(() => {
+          const params = new URLSearchParams();
+          for (let i of newState) params.append("movies", i);
+          params.append("id", response.id);
+          history.replaceState(null, "", "/compare?" + params.toString());
           return newState;
         });
       },
@@ -81,9 +105,14 @@ export default function Compare() {
   };
   return (
     <div>
+      <CompareNavStyled>
+        <Link href="/">
+          <HomeIcon />
+        </Link>
+      </CompareNavStyled>
       <h1 style={{ marginTop: "0px" }}>Compare movies</h1>
       <div style={{ width: "100%" }}>
-        <Graph data={comparedData} />
+        <Graph data={lastCompared} />
       </div>
       <div>
         <Button onClick={handleOpen}>+ Add movie</Button>
@@ -92,6 +121,7 @@ export default function Compare() {
         elevation={0}
         sx={{
           display: "flex",
+          gap: "10px",
         }}
       >
         {movies.map((id) => (

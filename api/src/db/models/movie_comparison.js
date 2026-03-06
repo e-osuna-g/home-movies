@@ -12,7 +12,7 @@ export default class movie_comparison extends Model {
       },
       createdAt: {
         type: DataTypes.DATE,
-        defaultValue: sequelize.fn("NOW"),
+        defaultValue: DataTypes.NOW,
         field: "created_at",
       },
     }, {

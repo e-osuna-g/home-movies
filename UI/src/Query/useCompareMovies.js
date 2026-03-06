@@ -9,14 +9,20 @@ let fmtOpts = {
   timeStyle: "medium",
 };
 
-export default function useCompareMovies(movies, lastComparedAtProp = "") {
-  const [lastComparedAt, setLastComparedAt] = useState(lastComparedAtProp);
+export default function useCompareMovies(
+  movies,
+  lastComparedAtP = "",
+  idP = null,
+) {
+  const [lastComparedAt, setLastComparedAt] = useState(lastComparedAtP);
+  const [id, setId] = useState(idP);
   const mutation = useMutation({
-    mutationKey: ["/api/compare", movies, lastComparedAt],
+    mutationKey: ["/api/compare", movies, lastComparedAt, id],
     retry: false,
     mutationFn: fetchCompareMovies,
     onSuccess: (data) => {
       setLastComparedAt(data.comparedAt);
+      setId(data.id);
     },
   });
   return mutation;
@@ -25,7 +31,7 @@ async function fetchCompareMovies(search, mutation) {
   const ids = search;
 
   const comparedAt = mutation.mutationKey[2];
-
+  const id = mutation.mutationKey[3];
   const val = await fetch(
     `${API_SERVER}/api/compare`,
     {
@@ -36,7 +42,7 @@ async function fetchCompareMovies(search, mutation) {
       },
       body: JSON.stringify({
         imdbIds: ids,
-
+        id: id,
         comparedAt: comparedAt // we should be comparing IDs
           ? new Intl.DateTimeFormat("en-CA", fmtOpts).format(
             new Date(comparedAt),

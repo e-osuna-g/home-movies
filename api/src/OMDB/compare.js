@@ -299,11 +299,11 @@ export async function compareMovies(request, reply) {
     },
     movieCount: imdbIds.length,
   };
-  if (request.body.comparedAt) {
+  if (request.body.id) {
     //edited
     const movieComparisonResult = await movieComparison.findOne({
       where: {
-        created_at: request.body.comparedAt,
+        id: request.body.id,
       },
     });
 

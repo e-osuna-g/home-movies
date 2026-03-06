@@ -33,15 +33,15 @@ describe("MiniMovie", () => {
     const { getByText, getByRole } = await render(
       <QueryClientProvider client={queryClient}>
         <MiniMovieView
-          movieId={"tt0126029"}
-          removeMovie={() => mockRemoveMovie("tt0126029")}
+          movieId={MovieMock.shrek.imdbID}
+          removeMovie={() => mockRemoveMovie(MovieMock.shrek.imdbID)}
         />
       </QueryClientProvider>,
     );
-    await expect.element(getByText("Shrek")).toBeInTheDocument();
+    await expect.element(getByText(MovieMock.shrek.Title)).toBeInTheDocument();
 
     expect(getByRole("img").element().src).toBe(MovieMock.shrek.Poster);
-    expect(getByRole("button")).toBeInTheDocument();
+    await expect(getByRole("button")).toBeInTheDocument();
     await getByRole("button").click();
     expect(mockRemoveMovie).toHaveBeenCalledOnce();
   });
