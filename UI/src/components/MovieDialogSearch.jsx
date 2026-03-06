@@ -66,7 +66,6 @@ export default function MovieDialogSearch(
             inputValue={searchValue}
             value={null}
             onInputChange={(_event, newInputValue) => {
-              console.log("loggin", newInputValue, _event);
               setSearchValue(newInputValue);
             }}
             onChange={(event, newValue) => {

@@ -56,7 +56,6 @@ describe("MovieDialogContent", () => {
         />
       </QueryClientProvider>,
     );
-    //console.log("Screen", screen);
     await expect.element(getByRole("alert")).toBeInTheDocument();
   });
 });

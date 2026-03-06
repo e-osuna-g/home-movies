@@ -52,7 +52,6 @@ async function fetchCompareMovies(search, mutation) {
     },
   );
   if (!val.ok) {
-    console.log("throwing compare error", val);
     throw await val.json();
   }
   return await val.json();

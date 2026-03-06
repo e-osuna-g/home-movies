@@ -2,7 +2,6 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 
 const gridItemStyle = (theme) => {
-  console.log("theme", theme);
   return {
     padding: theme.spacing(1),
     boxShadow: theme.shadows[3],
