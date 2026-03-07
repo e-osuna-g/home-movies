@@ -84,6 +84,7 @@ export default function MovieDialogSearch(
       <DialogActions>
         <Button
           variant="contained"
+          disabled={!movie?.imdbID}
           onClick={() => setAndClose(movie.imdbID)}
         >
           Add to compare
