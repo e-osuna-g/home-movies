@@ -47,7 +47,7 @@ async function searchMovies(request, reply) {
   );
   const responseJson = await searchResponse.json();
   if (responseJson.Response == "False") {
-    reply.status(400).send(responseJson);
+    return reply.status(400).send(responseJson);
   }
   return responseJson;
 }
