@@ -40,7 +40,9 @@ export default function Compare() {
     },
   });
   const lastCompared = comparations[comparations.length - 1];
-
+  useEffect(() => {
+    document.title = "Movie Comparison - Compare";
+  }, []); // Empty dependency array means it runs once on mount
   const onCompareError = (error) => {
     if (error && error.error.indexOf("Duplicate") >= 0) {
       setIsSnackOpen(true);
