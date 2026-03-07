@@ -7,4 +7,5 @@ export const sequalize = new Sequelize(DB.NAME, DB.USERNAME, DB.PASSWORD, {
   port: DB.PORT,
   dialect: DB.DIALECT,
   timezone: "+00:00", // Default is +00:00 (UTC)
+  models: DB.MODELS ? [DB.MODELS] : undefined,
 });

@@ -5,14 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "node --env-file .env --watch src/index.js ",
-    "test": "node --env-file .env.test --test ./tests/**/**.test.js"
+    "test": "node --env-file .env.test  --test-only --test ./tests/**/**.test.js"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",
     "fastify": "^5.7.4",
     "mariadb": "^3.5.1",
     "sequelize": "^6.37.7",
-    "sequelize-auto": "^0.8.8"
+    "sequelize-auto": "^0.8.8",
+    "sqlite3": "^5.1.7",
+    "undici": "^7.22.0"
   },
   "author": "",
   "license": "ISC",

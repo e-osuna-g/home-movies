@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 import { movieInfo } from "../db/movieComparison.js";
 import { OMDB_API_KEY, OMDB_URL } from "../envVars.js";
+import { fetch } from "undici";
 /**
  * @param {string[]} ids
  */
@@ -26,7 +27,7 @@ export async function getMovies(ids) {
       });
     }
   }
-  movieInfo.bulkCreate(itemsAdded);
+  await movieInfo.bulkCreate(itemsAdded);
   return [
     ...moviesFound.map((movie) => movie.info),
     ...itemsAdded.map((i) => i.info),
@@ -50,7 +51,7 @@ export async function fetchMovie(imdbId) {
   query.set("i", imdbId);
 
   return fetch(
-    `${OMDB_URL}?${query.toString()}`,
+    `${OMDB_URL}/?${query.toString()}`,
   ).then((response) => {
     return [null, response.json()];
   }).catch((e) => {

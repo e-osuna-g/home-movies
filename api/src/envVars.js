@@ -8,4 +8,5 @@ export const DB = {
   HOST: process.env.DB_HOST,
   PORT: process.env.DB_PORT,
   DIALECT: process.env.DB_DIALECT,
+  MODELS: process.env.DB_MODELS,
 };
