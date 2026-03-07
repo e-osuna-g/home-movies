@@ -1,17 +1,6 @@
-import Fastify from "fastify";
-import { routes as omdbRoutes } from "./OMDB/routes.js";
-import cors from "@fastify/cors";
+import { buildFastify } from "./fastifyBuilder.js";
 
-const fastify = Fastify({
-  logger: true,
-});
-
-fastify.register(cors);
-// Declare a route
-fastify.get("/", async function handler(request, reply) {
-  return { hello: "world" };
-});
-fastify.register(omdbRoutes);
+const fastify = buildFastify();
 // Run the server!
 try {
   await fastify.listen({ port: 3000 });
