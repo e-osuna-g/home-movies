@@ -22,7 +22,7 @@ describe("MovieDialogContent", () => {
 
   // Close server after all tests
   afterAll(() => {
-    //worker.stop();
+    worker.stop();
     queryClient.clear();
   });
 

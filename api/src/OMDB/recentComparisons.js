@@ -40,7 +40,6 @@ export async function recentComparisons(request, reply) {
     const titles = ids.map((id) =>
       moviesInfo.find((info) => info.imdbID == id).Title
     );
-    console.log(movieComp);
     return {
       imdbIds: ids,
       Titles: titles,

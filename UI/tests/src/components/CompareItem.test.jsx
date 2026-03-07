@@ -3,7 +3,6 @@ import CompareItem from "../../../src/components/CompareItem.jsx";
 import { render } from "vitest-browser-react";
 import { theme } from "../../../src/theme.js";
 import { ThemeProvider } from "@emotion/react";
-
 const Titles = [
   "Comparing",
   "Comparing 2: The return",
@@ -12,6 +11,7 @@ const Titles = [
   "Comparing 5: the last one i swear",
 ];
 const imdbIds = ["1", "2", "3", "4", "5"];
+
 describe("CompareItem", () => {
   test("it shows the correct titles", async () => {
     const { getByText } = await render(

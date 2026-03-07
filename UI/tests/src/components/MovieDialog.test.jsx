@@ -1,6 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
 import { render } from "vitest-browser-react";
-import MiniMovieView from "../../../src/components/MiniMovieView.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterAll, afterEach, beforeAll } from "vitest";
 import { setupWorker } from "msw/browser";
@@ -23,7 +22,7 @@ describe("MovieDialog", () => {
 
   // Close server after all tests
   afterAll(() => {
-    //worker.stop();
+    worker.stop();
     queryClient.clear();
   });
 

@@ -6,7 +6,7 @@ export function useSearchMovies(search, opts = { debounceTime: 500 }) {
   const debouncedSearch = useDebounce(search, opts.debounceTime);
   const { isPending, error, data } = useQuery({
     retry: false,
-    queryKey: ["/api/search/", debouncedSearch],
+    queryKey: ["/api/search", debouncedSearch],
     queryFn: fetchSearchMovie,
     gcTime: Infinity,
     staleTime: DAY,
