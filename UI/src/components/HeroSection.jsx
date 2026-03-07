@@ -1,6 +1,4 @@
-import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
 import { SearchMovie } from "./SearchMovie";
 
 export default function HeroSection() {
