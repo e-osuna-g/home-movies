@@ -14,7 +14,7 @@ export default function RecentComparisons() {
     <Grid sx={ParentRecentItems} container spacing={10}>
       {isPending ? <CircularProgress /> : isSuccess
         ? (
-          data.map((i) => <CompareItem {...i} />)
+          data.map((i, index) => <CompareItem key={index} {...i} />)
         )
         : <div>Error on fetching</div>}
     </Grid>
