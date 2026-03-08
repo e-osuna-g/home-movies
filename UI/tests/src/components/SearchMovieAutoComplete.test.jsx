@@ -24,7 +24,7 @@ describe("SearchMovieAutoComplete", () => {
     defaultProps.onInputChange.mockClear();
   });
   test("it renders correctly", async () => {
-    const { getByLabelText, getByRole } = await render(
+    const { getByRole } = await render(
       <ThemeProvider theme={theme}>
         <SearchMovieAutoComplete {...defaultProps} />
       </ThemeProvider>,
