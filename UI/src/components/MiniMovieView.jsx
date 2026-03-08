@@ -17,6 +17,7 @@ const MiniMovieViewStyled = styled("div", {
 
   "& .mini-movie-card": {
     padding: "10px",
+    paddingTop: "20px",
     display: "flex",
 
     flexDirection: "column",
@@ -55,13 +56,12 @@ export default function MiniMovieView({ movieId, removeMovie }) {
           <Typography>
             {movie.Title}
           </Typography>
-          <span
+
+          <CloseIcon
             className="mini-movie-close-button"
             onClick={removeMovie}
             role="button"
-          >
-            <CloseIcon />
-          </span>
+          />
         </Card>
       </MiniMovieViewStyled>
     );

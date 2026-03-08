@@ -56,13 +56,7 @@ export default function MovieDialogSearch(
       <DialogContent>
         <div style={{ paddingTop: "5px" }}>
           <SearchMovieAutoComplete
-            options={data?.Search
-              ? data.Search.filter((current, index, array) => {
-                return !array.some((f, fIndex) =>
-                  f.Title == current.Title && fIndex != index
-                );
-              }).map((i) => i.Title)
-              : []}
+            options={data?.Search ? data.Search.map((i) => i) : []}
             inputValue={searchValue}
             value={null}
             onInputChange={(_event, newInputValue) => {
