@@ -8,7 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest --browser",
+    "test:dev": "vitest --browser",
+    "test:prod": "vitest --run --browser.headless"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
