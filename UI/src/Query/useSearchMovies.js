@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import useDebounce from "../hooks/useDebounce";
 import { API_SERVER } from "../env.js";
-const DAY = 1000 * 60 * 60 * 24;
+import { DAY_IN_MILI } from "../utils.js";
 export function useSearchMovies(search, opts = { debounceTime: 500 }) {
   const debouncedSearch = useDebounce(search, opts.debounceTime);
   const { isPending, error, data } = useQuery({
@@ -9,7 +9,7 @@ export function useSearchMovies(search, opts = { debounceTime: 500 }) {
     queryKey: ["/api/search", debouncedSearch],
     queryFn: fetchSearchMovie,
     gcTime: Infinity,
-    staleTime: DAY,
+    staleTime: DAY_IN_MILI,
   });
   return { isPending, error, data };
 }
