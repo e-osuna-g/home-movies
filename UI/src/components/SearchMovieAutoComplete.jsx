@@ -9,6 +9,7 @@ export default function SearchMovieAutoComplete({
   onChange,
   inputValue,
   onInputChange,
+  withPopOver = false,
 }) {
   const [isOpen, setIsOpen] = useState(true);
   return (
@@ -19,16 +20,25 @@ export default function SearchMovieAutoComplete({
         if (event.code == "Enter") return;
         onInputChange(event, newInputValue);
       }}
+      onClose={() => setIsOpen(false)}
+      onOpen={() => setIsOpen(true)}
+      openOnFocus={true}
       getOptionLabel={(opt) => opt.Title}
       getOptionKey={(opt) => opt.imdbID}
       renderOption={(props, option) => {
         const { key } = props;
-        return <ImageItemBox key={key} props={props} option={option} />;
+        return (
+          <ImageItemBox
+            withPopOver={withPopOver}
+            key={key}
+            props={props}
+            option={option}
+          />
+        );
       }}
       value={value}
       inputValue={inputValue}
       open={isOpen}
-      disableCloseOnSelect={true}
       onChange={(event, newValue) => {
         setIsOpen(false);
         onChange(event, newValue);

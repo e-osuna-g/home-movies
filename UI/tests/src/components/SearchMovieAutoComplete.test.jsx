@@ -13,6 +13,7 @@ const mockOptions = [
 
 const defaultProps = {
   options: mockOptions,
+  withPopOver: false,
   value: null,
   onChange: vi.fn(),
   inputValue: "",
@@ -41,6 +42,7 @@ describe("SearchMovieAutoComplete", () => {
     );
 
     await getByRole("combobox").fill("Inter");
+    await getByRole("combobox").hover();
     expect(defaultProps.onInputChange).toHaveBeenLastCalledWith(
       expect.anything(),
       "Inter",
@@ -52,7 +54,7 @@ describe("SearchMovieAutoComplete", () => {
         <SearchMovieAutoComplete {...defaultProps} />
       </ThemeProvider>,
     );
-
+    await getByRole("combobox").hover();
     await getByRole("combobox").click();
     await userEvent.keyboard("{Enter}");
     expect(defaultProps.onInputChange).not.toHaveBeenCalled();

@@ -5,7 +5,7 @@ import Popover from "@mui/material/Popover";
 const ImageBox = styled(Box)({
   overflow: "visible",
 });
-export default function ImageItemBox({ props, option }) {
+export default function ImageItemBox({ props, option, withPopOver = true }) {
   const { key, ...optionProps } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const handlePopoverOpen = (event) => {
@@ -32,30 +32,35 @@ export default function ImageItemBox({ props, option }) {
         src={option.Poster}
         alt={"Image of " + option.Title}
       />
-      <Popover
-        style={{ width: 200 }}
-        sx={{ pointerEvents: "none" }}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handlePopoverClose}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        disableRestoreFocus
-      >
-        <img
-          loading="lazy"
-          width="150"
-          onError={(e) => e.target.src = "/poster404.png"}
-          src={option.Poster}
-          alt={"Image of " + option.Title}
-        />
-      </Popover>
+      {withPopOver
+        ? (
+          <Popover
+            style={{ width: 200 }}
+            sx={{ pointerEvents: "none" }}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handlePopoverClose}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            disableRestoreFocus
+          >
+            <img
+              loading="lazy"
+              width="150"
+              onError={(e) => e.target.src = "/poster404.png"}
+              src={option.Poster}
+              alt={"Image of " + option.Title}
+            />
+          </Popover>
+        )
+        : null}
+
       {option.Title}
     </ImageBox>
   );
