@@ -19,14 +19,13 @@ const CompareNavStyled = styled("nav")({
 export default function Compare() {
   const queryValues = new URLSearchParams(window.location.search);
   const queryMovies = queryValues.getAll("movies");
-  const comparedAt = queryValues.get("compared_at");
   const hasRun = useRef(false);
   const id = queryValues.get("id");
   const [isOpen, setIsOpen] = useState(false);
   const [isSnackOpen, setIsSnackOpen] = useState(false);
   const [ErrorMessage, setErrorMessage] = useState("");
   const [movies, setMovies] = useState(queryMovies);
-  const { mutate } = useCompareMovies(movies, comparedAt, id);
+  const { mutate } = useCompareMovies(movies, id);
   const comparations = useMutationState({
     filters: { status: "success" },
     select: (mutation) => {
@@ -55,7 +54,11 @@ export default function Compare() {
     //initial mutation to refresh everything
     if (!hasRun.current) {
       hasRun.current = true;
-      mutate([...movies]);
+      mutate([...movies], {
+        onSuccess: (response) => {
+          updateMovies(movies, response.id);
+        },
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mutate]);
@@ -74,36 +77,58 @@ export default function Compare() {
   const handleClose = () => {
     setIsOpen(false);
   };
+  const updateMovies = (movies, movieId) => {
+    const params = new URLSearchParams();
+    for (let i of movies) params.append("movies", i);
+    if (movieId) {
+      params.append("id", movieId);
+    } else if (id) {
+      params.append("id", movieId); //if the id was provided but last movie was removed
+    }
+    history.replaceState(null, "", "/compare?" + params.toString());
+  };
   const addMovie = (movieId) => {
-    if (movies.length < 5) {
+    if (movies.length >= 5) {
+      setIsSnackOpen(true);
+      setErrorMessage("Cannot add more than 5 movies.");
+    }
+    const newState = [...movies, movieId];
+    if (newState.length <= 1) {
+      updateMovies(newState, id);
+      setMovies(newState);
+    } else if (newState.length > 1 && movies.length < 5) {
       mutate([...movies, movieId], {
         onError: onCompareError,
-        onSettled: (response) => {
+        onSuccess: (response) => {
           setMovies((state) => {
+            console.log("what", response);
             const newState = [...state, movieId];
-            const params = new URLSearchParams();
-            for (let i of newState) params.append("movies", i);
-            params.append("id", response.id);
-            history.replaceState(null, "", "/compare?" + params.toString());
+            updateMovies(newState, response.id);
             return newState;
           });
         },
       });
     }
   };
+
   const removeMovie = (movieId) => {
     const newState = movies.filter((id) => id !== movieId);
-    mutate(newState, {
-      onSuccess: (response) => {
-        setMovies(() => {
-          const params = new URLSearchParams();
-          for (let i of newState) params.append("movies", i);
-          params.append("id", response.id);
-          history.replaceState(null, "", "/compare?" + params.toString());
-          return newState;
-        });
-      },
-    });
+    if (movies.length == 1) {
+      updateMovies(newState, id);
+      setMovies(newState);
+    }
+    if (newState.length >= 2) {
+      mutate(newState, {
+        onSuccess: (response) => {
+          setMovies(() => {
+            if (response.id) {
+              updateMovies(newState, response.id);
+            }
+            return newState;
+          });
+        },
+      });
+    }
   };
   return (
     <div>
