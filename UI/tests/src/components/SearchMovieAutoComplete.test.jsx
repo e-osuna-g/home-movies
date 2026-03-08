@@ -1,10 +1,15 @@
-import { describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { render } from "vitest-browser-react";
 import { theme } from "../../../src/theme.js";
 import { ThemeProvider } from "@emotion/react";
 import SearchMovieAutoComplete from "../../../src/components/SearchMovieAutoComplete.jsx";
 import { userEvent } from "vitest/browser";
-const mockOptions = ["Inception", "Interstellar", "Dune", "Matrix"];
+import { MockById } from "../../Mocks/movies.js";
+const mockOptions = [
+  MockById.tt0052602,
+  MockById.tt0076584,
+  MockById.tt0093058,
+];
 
 const defaultProps = {
   options: mockOptions,
@@ -14,13 +19,17 @@ const defaultProps = {
   onInputChange: vi.fn(),
 };
 describe("SearchMovieAutoComplete", () => {
+  beforeEach(() => {
+    defaultProps.onChange.mockClear();
+    defaultProps.onInputChange.mockClear();
+  });
   test("it renders correctly", async () => {
-    const { getByLabelText } = await render(
+    const { getByLabelText, getByRole } = await render(
       <ThemeProvider theme={theme}>
         <SearchMovieAutoComplete {...defaultProps} />
       </ThemeProvider>,
     );
-    await expect.element(getByLabelText(/search movie/i)).toBeInTheDocument();
+    await expect.element(getByRole("combobox")).toBeInTheDocument();
   });
 
   test("it correctly renders the input set correctly", async () => {
@@ -30,7 +39,7 @@ describe("SearchMovieAutoComplete", () => {
       </ThemeProvider>,
     );
 
-    await getByRole("combobox", { name: /search movie/i }).fill("Inter");
+    await getByRole("combobox").fill("Inter");
     expect(defaultProps.onInputChange).toHaveBeenLastCalledWith(
       expect.anything(),
       "Inter",
@@ -48,7 +57,7 @@ describe("SearchMovieAutoComplete", () => {
     expect(defaultProps.onInputChange).not.toHaveBeenCalled();
   });
   test("it filters the options when text is added", async () => {
-    const props = { ...defaultProps, inputValue: "mat" };
+    const props = { ...defaultProps, inputValue: "The" };
     const { getByRole } = await render(
       <ThemeProvider theme={theme}>
         <SearchMovieAutoComplete
@@ -57,9 +66,9 @@ describe("SearchMovieAutoComplete", () => {
       </ThemeProvider>,
     );
     await getByRole("combobox").click();
-    await expect.element(getByRole("option", { name: "matrix" }))
+    await expect.element(getByRole("option", { name: "The Bat" }))
       .toBeInTheDocument();
-    await expect.element(getByRole("option", { name: "Interstellar" })).not
+    await expect.element(getByRole("option", { name: "Full Metal Jacket" })).not
       .toBeInTheDocument();
   });
 });
