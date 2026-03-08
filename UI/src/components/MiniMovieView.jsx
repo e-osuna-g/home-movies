@@ -4,6 +4,8 @@ import Skeleton from "@mui/material/Skeleton";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
+import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
 
 const MiniMovieViewStyled = styled("div", {
   name: "MiniMovieView",
@@ -33,14 +35,14 @@ const MiniMovieViewStyled = styled("div", {
   "& .mini-movie-close-button": {
     cursor: "pointer",
     position: "absolute",
-    top: "0px",
-    right: "0px",
+    top: "-5px",
+    right: "-5px",
   },
 });
 export default function MiniMovieView({ movieId, removeMovie }) {
   const { data: movie, isPending } = useGetMovie(movieId);
   if (isPending) {
-    return <Skeleton variant="rectangular" width={210} height={118} />;
+    return <CircularProgress />;
   } else if (movie) {
     return (
       <MiniMovieViewStyled>
@@ -57,11 +59,14 @@ export default function MiniMovieView({ movieId, removeMovie }) {
             {movie.Title}
           </Typography>
 
-          <CloseIcon
-            className="mini-movie-close-button"
+          <IconButton
+            aria-label="close"
             onClick={removeMovie}
-            role="button"
-          />
+            className="mini-movie-close-button"
+            size="small"
+          >
+            <CloseIcon />
+          </IconButton>
         </Card>
       </MiniMovieViewStyled>
     );

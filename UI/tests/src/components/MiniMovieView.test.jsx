@@ -6,7 +6,7 @@ import { afterAll, afterEach, beforeAll } from "vitest";
 import { setupWorker } from "msw/browser";
 import { http, HttpResponse } from "msw";
 import { API_SERVER } from "../../../src/env.js";
-import { MovieMock } from "../../mockResponses.js";
+import { MovieMock } from "../../Mocks/mockResponses.js";
 
 const queryClient = new QueryClient();
 
@@ -41,7 +41,7 @@ describe("MiniMovie", () => {
     await expect.element(getByText(MovieMock.shrek.Title)).toBeInTheDocument();
 
     expect(getByRole("img").element().src).toBe(MovieMock.shrek.Poster);
-    await expect(getByRole("button")).toBeInTheDocument();
+    await expect.element(getByRole("button")).toBeInTheDocument();
     await getByRole("button").click();
     expect(mockRemoveMovie).toHaveBeenCalledOnce();
   });
