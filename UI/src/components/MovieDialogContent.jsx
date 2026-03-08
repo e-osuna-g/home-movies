@@ -10,6 +10,7 @@ const MovieDialogContentStyled = styled("div", {
 })({
   display: "flex",
   gap: "10px",
+  marginTop: "10px",
 });
 
 export default function MovieDialogContent(
