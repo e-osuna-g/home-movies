@@ -101,7 +101,6 @@ export default function Compare() {
         onError: onCompareError,
         onSuccess: (response) => {
           setMovies((state) => {
-            console.log("what", response);
             const newState = [...state, movieId];
             updateMovies(newState, response.id);
             return newState;

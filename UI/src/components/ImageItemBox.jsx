@@ -13,7 +13,6 @@ export default function ImageItemBox({ props, option }) {
   };
 
   const handlePopoverClose = () => {
-    console.log("getting out");
     setAnchorEl(null);
   };
   const open = Boolean(anchorEl);
