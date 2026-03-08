@@ -12,7 +12,7 @@ import { compare_all_data, recentComparisons_1_3 } from "./Mocks/responses.js";
 import { MockById } from "./Mocks/mocks.js";
 import { areSetsEquals, compareFloatsEpsilon } from "../src/utils.js";
 
-describe.only("/api/compare", { concurrency: false }, () => {
+describe("/api/compare", { concurrency: false }, () => {
   //This 2 type annotations help a lot with intellisense
   /** @type {import('undici').MockAgent<MockAgent.Options>} */
   let agent;
@@ -72,7 +72,7 @@ describe.only("/api/compare", { concurrency: false }, () => {
     t.assert.deepEqual(json, compare_all_data);
   });
 
-  test.only("get comparation creating a new comparison id and fetching a record", async (t) => {
+  test("get comparation creating a new comparison id and fetching a record", async (t) => {
     const imdbIds = ["tt0145487", "tt0052602", "tt0076584", "tt0093058"];
 
     await seed_movies_info(["tt0145487", "tt0052602", "tt0076584"]);
