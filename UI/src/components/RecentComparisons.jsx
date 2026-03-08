@@ -5,6 +5,8 @@ import Grid from "@mui/material/Grid";
 import Alert from "@mui/material/Alert";
 
 const ParentRecentItems = (theme) => ({
+  width: "100%",
+  alignItems: "flex-start",
   [theme.breakpoints.down("md")]: {
     justifyContent: "center",
   },
@@ -19,7 +21,7 @@ export default function RecentComparisons() {
     );
   }
   return (
-    <Grid sx={ParentRecentItems} container spacing={10}>
+    <Grid sx={ParentRecentItems} spacing={3} container>
       {isPending ? <CircularProgress /> : isSuccess
         ? (
           data.map((i, index) => <CompareItem key={index} {...i} />)
