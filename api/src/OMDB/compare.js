@@ -102,7 +102,6 @@ export async function compareMovies(request, reply) {
     count: 0,
   }));
   for (let movie of movies) {
-    console.log(movie);
     const movieGenres = movie.Genre.split(",").map((i) => i.trim());
     movieGenres.map((movieGenreItem) => {
       if (commonGenres.has(movieGenreItem)) {
