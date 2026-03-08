@@ -29,6 +29,7 @@ describe("SearchMovieAutoComplete", () => {
         <SearchMovieAutoComplete {...defaultProps} />
       </ThemeProvider>,
     );
+    await getByRole("combobox").hover();
     await expect.element(getByRole("combobox")).toBeInTheDocument();
   });
 
@@ -65,6 +66,7 @@ describe("SearchMovieAutoComplete", () => {
         />
       </ThemeProvider>,
     );
+    await getByRole("combobox").hover();
     await getByRole("combobox").click();
     await expect.element(getByRole("option", { name: "The Bat" }))
       .toBeInTheDocument();

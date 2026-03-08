@@ -5,7 +5,7 @@ import { afterAll, afterEach, beforeAll } from "vitest";
 import { setupWorker } from "msw/browser";
 import { http, HttpResponse } from "msw";
 import { API_SERVER } from "../../../src/env.js";
-import { MovieMock } from "../../mockResponses.js";
+import { MovieMock } from "../../Mocks/mockResponses.js";
 import MovieDialog from "../../../src/components/MovieDialog.jsx";
 
 const queryClient = new QueryClient();

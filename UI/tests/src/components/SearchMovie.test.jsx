@@ -6,7 +6,7 @@ import { SearchMovie } from "../../../src/components/SearchMovie.jsx";
 import { theme } from "../../../src/theme.js";
 import { http, HttpResponse } from "msw";
 import { API_SERVER } from "../../../src/env.js";
-import { MovieMock } from "../../mockResponses.js";
+import { MovieMock } from "./../../Mocks/mockResponses.js";
 import { setupWorker } from "msw/browser";
 const queryClient = new QueryClient();
 const handlers = [

@@ -35,7 +35,7 @@ export const MovieMock = {
 
 export const recentComparisonsMock = [{
   "imdbIds": ["tt2015381", "tt3896198", "tt6791350"],
-  "Titles": [
+  "titles": [
     "Guardians of the Galaxy",
     "Guardians of the Galaxy Vol. 2",
     "Guardians of the Galaxy Vol. 3",
@@ -45,43 +45,43 @@ export const recentComparisonsMock = [{
   "id": 116,
 }, {
   "imdbIds": ["tt0371746", "tt1228705", "tt1300854"],
-  "Titles": ["Iron Man", "Iron Man 2", "Iron Man 3"],
+  "titles": ["Iron Man", "Iron Man 2", "Iron Man 3"],
   "movieCount": 3,
   "comparedAt": "2026-03-06T05:02:31.000Z",
   "id": 115,
 }, {
   "imdbIds": ["tt0145487", "tt0316654", "tt0413300"],
-  "Titles": ["Spider-Man", "Spider-Man 2", "Spider-Man 3"],
+  "titles": ["Spider-Man", "Spider-Man 2", "Spider-Man 3"],
   "movieCount": 3,
   "comparedAt": "2026-03-06T04:07:36.000Z",
   "id": 114,
 }, {
   "imdbIds": ["tt0145487", "tt0316654", "tt0413300"],
-  "Titles": ["Spider-Man", "Spider-Man 2", "Spider-Man 3"],
+  "titles": ["Spider-Man", "Spider-Man 2", "Spider-Man 3"],
   "movieCount": 3,
   "comparedAt": "2026-03-06T04:01:15.000Z",
   "id": 113,
 }, {
   "imdbIds": ["tt0110912", "tt0378194"],
-  "Titles": ["Pulp Fiction", "Kill Bill: Vol. 2"],
+  "titles": ["Pulp Fiction", "Kill Bill: Vol. 2"],
   "movieCount": 2,
   "comparedAt": "2026-03-06T02:56:40.000Z",
   "id": 112,
 }, {
   "imdbIds": ["tt0110912", "tt0266697", "tt0378194"],
-  "Titles": ["Pulp Fiction", "Kill Bill: Vol. 1", "Kill Bill: Vol. 2"],
+  "titles": ["Pulp Fiction", "Kill Bill: Vol. 1", "Kill Bill: Vol. 2"],
   "movieCount": 3,
   "comparedAt": "2026-03-06T02:49:44.000Z",
   "id": 110,
 }, {
   "imdbIds": ["tt0110912", "tt0378194"],
-  "Titles": ["Pulp Fiction", "Kill Bill: Vol. 2"],
+  "titles": ["Pulp Fiction", "Kill Bill: Vol. 2"],
   "movieCount": 2,
   "comparedAt": "2026-03-06T02:49:38.000Z",
   "id": 109,
 }, {
   "imdbIds": ["tt0096895", "tt0103776", "tt0110912", "tt0145487"],
-  "Titles": ["Batman", "Batman Returns", "Pulp Fiction", "Spider-Man"],
+  "titles": ["Batman", "Batman Returns", "Pulp Fiction", "Spider-Man"],
   "movieCount": 4,
   "comparedAt": "2026-03-04T06:37:37.000Z",
   "id": 108,

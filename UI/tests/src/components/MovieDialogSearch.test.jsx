@@ -6,7 +6,7 @@ import { theme } from "../../../src/theme.js";
 import MovieDialogSearch from "../../../src/components/MovieDialogSearch.jsx";
 import { API_SERVER } from "../../../src/env.js";
 import { http, HttpResponse } from "msw";
-import { MovieMock } from "../../mockResponses.js";
+import { MovieMock } from "../../Mocks/mockResponses.js";
 import { setupWorker } from "msw/browser";
 const queryClient = new QueryClient();
 const handlers = [
@@ -55,11 +55,13 @@ describe("MovieDialogSearch", async () => {
       </QueryClientProvider>,
     );
     await getByRole("combobox").fill("Shre");
-    const element = await getByRole("presentation").nth(1);
+
+    const element = getByRole("presentation").nth(1);
+    await getByRole("combobox").hover();
     await expect.element(element).toBeInTheDocument();
-    const compareButton = getByRole("button", { name: "Add to compare" });
     await element.click();
-    await expect(compareButton).toBeEnabled();
+    const compareButton = getByRole("button", { name: "Add to compare" });
+    await expect.element(compareButton).toBeEnabled();
     await compareButton.click();
     expect(mockAddMovieHandler).toBeCalled();
   });

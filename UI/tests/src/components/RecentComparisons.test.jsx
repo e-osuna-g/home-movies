@@ -4,7 +4,7 @@ import RecentComparisons from "../../../src/components/RecentComparisons.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http, HttpResponse } from "msw";
 import { API_SERVER } from "../../../src/env.js";
-import { recentComparisonsMock } from "../../mockResponses.js";
+import { recentComparisonsMock } from "../../Mocks/mockResponses.js";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "../../../src/theme.js";
 import { setupWorker } from "msw/browser";
