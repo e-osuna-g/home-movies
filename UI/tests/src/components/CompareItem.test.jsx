@@ -3,7 +3,7 @@ import CompareItem from "../../../src/components/CompareItem.jsx";
 import { render } from "vitest-browser-react";
 import { theme } from "../../../src/theme.js";
 import { ThemeProvider } from "@emotion/react";
-const Titles = [
+const titles = [
   "Comparing",
   "Comparing 2: The return",
   "Comparing 3: The comparing",
@@ -17,13 +17,13 @@ describe("CompareItem", () => {
     const { getByText } = await render(
       <ThemeProvider theme={theme}>
         <CompareItem
-          Titles={Titles}
+          titles={titles}
           imdbIds={imdbIds}
           id={1}
         />
       </ThemeProvider>,
     );
-    for (let i of Titles) {
+    for (let i of titles) {
       expect(getByText(i, { exact: true })).toBeInTheDocument();
     }
   });
@@ -31,7 +31,7 @@ describe("CompareItem", () => {
     const { getByRole } = await render(
       <ThemeProvider theme={theme}>
         <CompareItem
-          Titles={Titles}
+          titles={titles}
           imdbIds={imdbIds}
           id={1}
         />
