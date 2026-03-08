@@ -83,7 +83,11 @@ development velocity, although I have extensive experience with `Oak` and
 for `Fastify` over `Koa` or `Express` to capitalize on its superior performance
 while maintaining a familiar architectural pattern. I evaluated `Koa` over
 `Fastify`, but the `Sequalize` constraint let me to chose a more familiar
-framework over a new library
+framework over a new library.
+
+Adding test-coverage, pretty reporters can be done, the numbers might be small,
+I think is because with my testing strategy we are testing directly with Fastify
+and the requests call the testing units.
 
 ### Database
 
