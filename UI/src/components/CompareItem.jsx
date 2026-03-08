@@ -5,7 +5,7 @@ const gridItemStyle = (theme) => ({
   padding: theme.spacing(1),
   boxShadow: theme.shadows[3],
   boxSizing: "border-box",
-
+  height: "100%",
   "& .compare-carousel-item": {
     display: "flex",
     flexDirection: "column",
