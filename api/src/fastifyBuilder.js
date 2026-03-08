@@ -4,7 +4,7 @@ import cors from "@fastify/cors";
 
 export async function buildFastify() {
   const fastify = Fastify({
-    logger: true,
+    logger: true, // Logger for fastify by deafult is `pino`
   });
 
   fastify.register(cors);
