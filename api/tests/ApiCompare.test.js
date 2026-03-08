@@ -74,9 +74,8 @@ describe("/api/compare", { concurrency: false }, () => {
 
   test("get comparation creating a new comparison id and fetching a record", async (t) => {
     const imdbIds = ["tt0145487", "tt0052602", "tt0076584", "tt0093058"];
-
     await seed_movies_info(["tt0145487", "tt0052602", "tt0076584"]);
-    const { movieComparison } = await seed_comparisons();
+    await seed_comparisons();
     agent.get(`${OMDB_URL}`).intercept({
       path: "/",
       method: "GET",

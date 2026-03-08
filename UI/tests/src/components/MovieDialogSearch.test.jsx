@@ -11,7 +11,6 @@ import { setupWorker } from "msw/browser";
 const queryClient = new QueryClient();
 const handlers = [
   http.get(`${API_SERVER}/api/search`, (r) => {
-    console.log("Requests", r);
     if (!r.request.url) return;
     let search = new URL(r.request.url).searchParams;
     if (
