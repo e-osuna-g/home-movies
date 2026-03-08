@@ -1,20 +1,23 @@
+import CircularProgress from "@mui/material/CircularProgress";
 import "./App.css";
-import Home from "./Pages/Home";
-import Compare from "./Pages/Compare";
-
+import React, { lazy, Suspense } from "react";
+const Compare = lazy(() => import("./Pages/Compare"));
+const Home = lazy(() => import("./Pages/Home"));
 function selectComponent(path) {
-  let component = <Home />;
   if (path === "/compare" || path === "/compare/") {
     return <Compare />;
+  } else {
+    return <Home />;
   }
-  return component;
 }
 function App() {
   const location = window.document.location;
 
   return (
     <>
-      {selectComponent(location.pathname)}
+      <Suspense fallback={<CircularProgress />}>
+        {selectComponent(location.pathname)}
+      </Suspense>
     </>
   );
 }
