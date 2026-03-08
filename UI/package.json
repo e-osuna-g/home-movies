@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest --browser",
-    "test:dev": "vitest --browser",
+    "test:dev": "vitest --browser --ui",
     "test:prod": "vitest --run --browser.headless"
   },
   "dependencies": {
