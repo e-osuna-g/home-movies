@@ -15,6 +15,7 @@ export default function SearchMovieAutoComplete({
     <Autocomplete
       freeSolo
       onInputChange={(event, newInputValue) => {
+        if (!isOpen) setIsOpen(true);
         if (event.code == "Enter") return;
         onInputChange(event, newInputValue);
       }}
