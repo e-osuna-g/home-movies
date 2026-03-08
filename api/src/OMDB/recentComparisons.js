@@ -32,7 +32,6 @@ export async function recentComparisons(request, reply) {
     items.dataValues.imdb_id
   );
   const moviesInfo = await getMovies(ids);
-  const response = [];
   return reply.status(200).send(findAll.map((movieComp) => {
     const ids = movieComp.dataValues.movie_comparison_items.map((i) =>
       i.imdb_id
@@ -42,7 +41,7 @@ export async function recentComparisons(request, reply) {
     );
     return {
       imdbIds: ids,
-      Titles: titles,
+      titles: titles,
       movieCount: ids.length,
       comparedAt: movieComp.dataValues.created_at,
       id: movieComp.dataValues.id,

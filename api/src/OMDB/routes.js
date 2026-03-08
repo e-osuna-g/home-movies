@@ -2,7 +2,7 @@ import { OMDB_API_KEY, OMDB_URL } from "../envVars.js";
 import { compareMovies } from "./compare.js";
 import { getMovies } from "./movies.js";
 import { recentComparisons } from "./recentComparisons.js";
-import { MockAgent, setGlobalDispatcher } from "undici";
+
 /**
  * @param {FastifyInstance} fastify encapsulated fastify instance
  * @param {Object} options plugin options, refer to https://fastify.dev/docs/latest/Reference/Plugins/#plugin-options

@@ -35,7 +35,7 @@ export default function CompareItem(prop) {
   return (
     <Grid size={{ xs: 10, md: 3 }} sx={gridItemStyle}>
       <div className="compare-carousel-item">
-        {prop.Titles.map((title) => <div>{title}</div>)}
+        {prop.titles.map((title) => <div>{title}</div>)}
         <Link underline="always" href={`/compare?${query.toString()}`}>
           Compare
         </Link>

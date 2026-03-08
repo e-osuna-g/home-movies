@@ -78,6 +78,42 @@ export async function compareMovies(request, reply) {
       for (let item of intersection) commonGenres.add(item);
     }
   }
+  const CommonActorsResult = Array.from(commonActors).map((actor) => ({
+    actor: actor,
+    appearsIn: [],
+    count: 0,
+  }));
+  for (let movie of movies) {
+    //if (movie.Actor)
+    const movieActors = movie.Actors.split(",").map((i) => i.trim());
+    movieActors.map((movieActorItem) => {
+      if (commonActors.has(movieActorItem)) {
+        let item = CommonActorsResult.find((i) => i.actor == movieActorItem);
+        if (item) {
+          item.appearsIn.push(movie.imdbID);
+          item.count++;
+        }
+      }
+    });
+  }
+  const CommonGenresResult = Array.from(commonGenres).map((genre) => ({
+    genre: genre,
+    appearsIn: [],
+    count: 0,
+  }));
+  for (let movie of movies) {
+    console.log(movie);
+    const movieGenres = movie.Genre.split(",").map((i) => i.trim());
+    movieGenres.map((movieGenreItem) => {
+      if (commonGenres.has(movieGenreItem)) {
+        let item = CommonGenresResult.find((i) => i.genre == movieGenreItem);
+        if (item) {
+          item.appearsIn.push(movie.imdbID);
+          item.count++;
+        }
+      }
+    });
+  }
   let ratingAverage = 0;
   let highestRating = -1;
   let highestRatingIndex = null;
@@ -293,8 +329,8 @@ export async function compareMovies(request, reply) {
       releaseYears,
       boxOffice,
       metascore,
-      commonActors: Array.from(commonActors.values()),
-      commonGenres: Array.from(commonGenres.values()),
+      commonActors: CommonActorsResult,
+      commonGenres: CommonGenresResult,
       uniqueDirectors: Array.from(directors.values()),
     },
     movieCount: imdbIds.length,
@@ -369,6 +405,7 @@ function movieSummary(movie) {
     Genre: movie.Genre,
     Metascore: movie.Metascore,
     BoxOffice: movie.BoxOffice,
+    Actors: movie.Actors,
   };
 }
 

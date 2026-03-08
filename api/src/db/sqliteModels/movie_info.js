@@ -10,8 +10,11 @@ export default class movie_info extends Model {
         primaryKey: true,
       },
       info: {
-        type: DataTypes.TEXT,
+        type: DataTypes.JSON,
         allowNull: false,
+        get: function () {
+          return JSON.parse(this.getDataValue("info"));
+        },
       },
       last_updated_at: {
         type: DataTypes.DATE,

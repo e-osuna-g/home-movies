@@ -29,8 +29,10 @@ export async function getMovies(ids) {
   }
   await movieInfo.bulkCreate(itemsAdded);
   return [
-    ...moviesFound.map((movie) => movie.info),
-    ...itemsAdded.map((i) => i.info),
+    ...moviesFound.map((movie) =>
+      typeof movie.info === "string" ? JSON.parse(movie.info) : movie.info
+    ),
+    ...itemsAdded.map((i) => JSON.parse(i.info)),
   ];
 }
 

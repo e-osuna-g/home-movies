@@ -36,14 +36,6 @@ export default class movie_comparison_items extends Model {
       paranoid: false,
       indexes: [
         {
-          name: "PRIMARY",
-          unique: true,
-          using: "BTREE",
-          fields: [
-            { name: "id" },
-          ],
-        },
-        {
           name: "movie_comparison_id",
           using: "BTREE",
           fields: [
