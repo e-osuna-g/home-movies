@@ -82,156 +82,7 @@ describe("/api/compare", { concurrency: false }, () => {
       },
     });
     const json = await response.json();
-    console.log("json", JSON.stringify(json));
-    //we do not know what the compareAt is, as it happened in the back
-    delete compare_all_data.comparedAt;
-    delete json.comparedAt;
-    //we already created 1 on purpose when doing the seed_comparison
-    compare_all_data.id = 2;
-    t.assert.equal(response.statusCode, 200);
-
-    t.assert.equal(
-      areSetsEquals(
-        new Set(json.comparison.uniqueDirectors),
-        new Set(compare_all_data.comparison.uniqueDirectors),
-      ),
-      true,
-      "comparison.uniqueDirectors are not equal",
-    );
-    for (let i in json.comparison.boxOffice) {
-      if (i == "distribution") {
-        for (let row of json.comparison.boxOffice.distribution) {
-          let found = compare_all_data.comparison.boxOffice.distribution.find(
-            (item) => item.imdbId == row.imdbId,
-          );
-          t.assert.deepEqual(row, found);
-        }
-      } else {
-        t.assert.deepEqual(
-          json.comparison.boxOffice[i],
-          compare_all_data.comparison.boxOffice[i],
-        );
-      }
-    }
-    for (let i in json.comparison.releaseYears) {
-      if (i == "timeline") {
-        for (let row of json.comparison.releaseYears.timeline) {
-          let found = compare_all_data.comparison.releaseYears.timeline.find(
-            (item) => item.imdbId == row.imdbId,
-          );
-          t.assert.deepEqual(row, found);
-        }
-      } else {
-        t.assert.deepEqual(
-          json.comparison.releaseYears[i],
-          compare_all_data.comparison.releaseYears[i],
-        );
-      }
-    }
-
-    for (let i in json.comparison.metascore) {
-      if (i == "distribution") {
-        for (let row of json.comparison.metascore.distribution) {
-          let found = compare_all_data.comparison.metascore.distribution.find(
-            (item) => item.imdbId == row.imdbId,
-          );
-          t.assert.deepEqual(row, found);
-        }
-      } else {
-        t.assert.deepEqual(
-          json.comparison.metascore[i],
-          compare_all_data.comparison.metascore[i],
-        );
-      }
-    }
-    for (let i in json.comparison.ratings) {
-      if (i == "distribution") {
-        for (let row of json.comparison.ratings.distribution) {
-          let found = compare_all_data.comparison.ratings.distribution.find(
-            (item) => item.imdbId == row.imdbId,
-          );
-          t.assert.deepEqual(row, found);
-        }
-      } else if (i == "average" || i == "range") {
-        t.assert.equal(
-          compareFloatsEpsilon(
-            Number(json.comparison.ratings[i]),
-            Number(compare_all_data.comparison.ratings[i]),
-            1e-1,
-          ),
-          true,
-          `.comparison.ratings${i} is different:${
-            Number(json.comparison.ratings[i])
-          }-${Number(compare_all_data.comparison.ratings[i])}`,
-        );
-      } else {
-        t.assert.deepEqual(
-          json.comparison.ratings[i],
-          compare_all_data.comparison.ratings[i],
-          `.comparison.ratings${i} is different: ${
-            json.comparison.ratings[i]
-          }|${compare_all_data.comparison.ratings[i]}`,
-        );
-      }
-    }
-    for (let i in json.comparison.runtime) {
-      if (i == "distribution") {
-        for (let row of json.comparison.runtime.distribution) {
-          let found = compare_all_data.comparison.runtime.distribution.find(
-            (item) => item.imdbId == row.imdbId,
-          );
-          t.assert.deepEqual(row, found);
-        }
-      } else if (i == "average") {
-        t.assert.equal(
-          compareFloatsEpsilon(
-            Number(json.comparison.runtime[i].split(" ")[0]),
-            Number(compare_all_data.comparison.runtime[i].split(" ")[0]),
-            1e-1,
-          ),
-          true,
-          `.comparison.runtime.${i} is different:${
-            Number(json.comparison.runtime[i].split(" ")[0])
-          }-${Number(compare_all_data.comparison.runtime[i].split(" ")[0])}`,
-        );
-      } else {
-        t.assert.deepEqual(
-          json.comparison.runtime[i],
-          compare_all_data.comparison.runtime[i],
-        );
-      }
-    }
-
-    for (let i in json.comparison.commonGenres) {
-      if (i == "appearsIn") {
-        for (let row of json.comparison.commonGenres[i]) {
-          let found = compare_all_data.comparison.commonGenres[i].find(
-            (item) => item.imdbId == row.imdbId,
-          );
-          t.assert.deepEqual(row, found);
-        }
-      } else {
-        t.assert.deepEqual(
-          json.comparison.commonGenres[i],
-          compare_all_data.comparison.commonGenres[i],
-        );
-      }
-    }
-    for (let i in json.comparison.commonActors) {
-      if (i == "appearsIn") {
-        for (let row of json.comparison.commonActors[i]) {
-          let found = compare_all_data.comparison.commonActors[i].find(
-            (item) => item.imdbId == row.imdbId,
-          );
-          t.assert.deepEqual(row, found);
-        }
-      } else {
-        t.assert.deepEqual(
-          json.comparison.commonActors[i],
-          compare_all_data.comparison.commonActors[i],
-        );
-      }
-    }
+    compareAllData(t, json, compare_all_data);
   });
 });
 
@@ -353,34 +204,40 @@ function compareAllData(t, actual, expected) {
     }
   }
 
-  for (let i in actual.comparison.commonGenres) {
-    if (i == "appearsIn") {
-      for (let row of actual.comparison.commonGenres[i]) {
-        let found = expected.comparison.commonGenres[i].find(
-          (item) => item.imdbId == row.imdbId,
-        );
-        t.assert.deepEqual(row, found);
-      }
-    } else {
-      t.assert.deepEqual(
-        actual.comparison.commonGenres[i],
-        expected.comparison.commonGenres[i],
+  for (let index in actual.comparison.commonGenres) {
+    for (let i in actual.comparison.commonGenres[index]) {
+      const expectedItem = expected.comparison.commonGenres.find((item) =>
+        item.genre == actual.comparison.commonGenres[index].genre
       );
+      if (i == "appearsIn") {
+        t.assert.deepEqual(
+          expectedItem[i],
+          actual.comparison.commonGenres[index][i],
+        );
+      } else {
+        t.assert.deepEqual(
+          actual.comparison.commonGenres[index][i],
+          expectedItem[i],
+        );
+      }
     }
   }
-  for (let i in actual.comparison.commonActors) {
-    if (i == "appearsIn") {
-      for (let row of actual.comparison.commonActors[i]) {
-        let found = expected.comparison.commonActors[i].find(
-          (item) => item.imdbId == row.imdbId,
+  for (let index in actual.comparison.commonActors) {
+    for (let i in actual.comparison.commonActors[index]) {
+      const expectedItem = expected.comparison.commonActors.find((item) => {
+        item.actor == actual.comparison.commonActors[i].actor;
+      }) ?? [];
+      if (i == "appearsIn") {
+        t.assert.deepEqual(
+          expectedItem[i],
+          actual.comparison.commonActors[index][i],
         );
-        t.assert.deepEqual(row, found);
+      } else {
+        t.assert.deepEqual(
+          actual.comparison.commonActors[index][i],
+          expectedItem[i],
+        );
       }
-    } else {
-      t.assert.deepEqual(
-        actual.comparison.commonActors[i],
-        expected.comparison.commonActors[i],
-      );
     }
   }
 }
