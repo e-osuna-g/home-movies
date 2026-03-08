@@ -20,9 +20,11 @@ export function SearchMovie() {
         onInputChange={(_event, newInputValue) => {
           setSearchValue(newInputValue);
         }}
-        onChange={(event, newValue) => {
+        onChange={(event, itemSelected) => {
           if (!isPending && data.Search?.length) {
-            const movie = data.Search.find((i) => i.Title == newValue);
+            const movie = data.Search.find((i) =>
+              i.imdbID == itemSelected.imdbID
+            );
             if (movie) {
               setDialogMovie(movie.imdbID);
               setSearchValue("");
